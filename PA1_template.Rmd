@@ -15,12 +15,7 @@ data$date = as.Date(data$date)
 
 
 ## What is mean total number of steps taken per day?
-
-```{r}
-aggregate(steps ~ date, data = data, sum)
-```
-
-2. Make a histogram of the total number of steps taken each day
+Make a histogram of the total number of steps taken each day 
 ```{r}
 hist(aggregate(steps ~ date, data = data, sum)$steps,
      breaks = 10,
@@ -28,7 +23,7 @@ hist(aggregate(steps ~ date, data = data, sum)$steps,
      main = "Distribution of (total steps/day)")
 ```
 
-3. Calculate and report the mean and median of the total number of steps taken per day
+Calculate and report the mean and median of the total number of steps taken per day 
 ```{r}
 mean(aggregate(steps ~ date, data = data, sum)$steps)
 median(aggregate(steps ~ date, data = data, sum)$steps)
@@ -36,8 +31,7 @@ median(aggregate(steps ~ date, data = data, sum)$steps)
 
 
 ## What is the average daily activity pattern?
-1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
 da = aggregate(steps ~ interval, data = data, mean)
 plot(da,
@@ -46,20 +40,18 @@ plot(da,
      xlab = "time")
 ```
 
-2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 ```{r}
 tail(da[ with(da, order(steps)),], n = 1)
 ```
 
 ## Imputing missing values
-1. Calculate and report the total number of missing values in the dataset
+Calculate and report the total number of missing values in the dataset
 ```{r}
 sum(is.na(data$steps))
 ```
 
-2. I will use the mean for each interval to substitue for NA values
-
-3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+Create a new dataset that is equal to the original dataset but with the missing data filled in (I will use the mean for each interval to substitue for NA values).
 ```{r}
 data2 = data
 for (i in which(sapply(data2,is.na))) {
@@ -67,8 +59,7 @@ for (i in which(sapply(data2,is.na))) {
 }
 ```
 
-4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
-
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment (No, they are fairly close)? What is the impact of imputing missing data on the estimates of the total daily number of steps (Adds weight to the mean and could alter measures of variance artificially)?
 ```{r}
 hist(aggregate(steps ~ date, data = data2, sum)$steps,
      breaks = 10,
@@ -87,3 +78,7 @@ data$wkday = ifelse(grepl('S',weekdays(data$date)),"weekend","weekday")
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 ```{r}
+library(ggplot2)
+da2= aggregate(steps ~ interval + wkday, data = data, mean)
+with(da2, qplot(interval,steps,col=wkday,geom='line'))
+```
