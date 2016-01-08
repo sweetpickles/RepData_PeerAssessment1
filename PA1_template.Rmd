@@ -79,6 +79,7 @@ data$wkday = ifelse(grepl('S',weekdays(data$date)),"weekend","weekday")
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 ```{r}
 library(ggplot2)
-da2= aggregate(steps ~ interval + wkday, data = data, mean)
-with(da2, qplot(interval,steps,col=wkday,geom='line'))
+da2 = aggregate(steps ~ interval + wkday, data = data, mean)
+p = ggplot(da2,aes(interval,steps))+geom_line()
+p + facet_grid(. ~ wkday)
 ```

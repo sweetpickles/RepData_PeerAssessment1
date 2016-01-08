@@ -124,8 +124,9 @@ data$wkday = ifelse(grepl('S',weekdays(data$date)),"weekend","weekday")
 
 ```r
 library(ggplot2)
-da2= aggregate(steps ~ interval + wkday, data = data, mean)
-with(da2, qplot(interval,steps,col=wkday,geom='line'))
+da2 = aggregate(steps ~ interval + wkday, data = data, mean)
+p = ggplot(da2,aes(interval,steps))+geom_line()
+p + facet_grid(. ~ wkday)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
